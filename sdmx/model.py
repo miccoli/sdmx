@@ -806,7 +806,7 @@ class ISOConceptReference(BaseModel):
     scheme_id: str
 
 
-class Concept(Item):
+class Concept(Item["Concept"]):
     #:
     core_representation: Optional[Representation] = None
     #:
@@ -953,7 +953,7 @@ class ComponentList(IdentifiableArtefact, Generic[CT]):
 # §4.3: Codelist
 
 
-class Code(Item):
+class Code(Item["Code"]):
     """SDMX-IM Code."""
 
 
@@ -964,7 +964,7 @@ class Codelist(ItemScheme[Code]):
 # §4.5: Category Scheme
 
 
-class Category(Item):
+class Category(Item["Category"]):
     """SDMX-IM Category."""
 
 
@@ -1008,7 +1008,7 @@ class Contact(BaseModel):
     uri: List[str]
 
 
-class Organisation(Item):
+class Organisation(Item["Organisation"]):
     #:
     contact: List[Contact] = []
 
