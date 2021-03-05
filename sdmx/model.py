@@ -483,10 +483,12 @@ ConstraintRoleType = Enum("ConstraintRoleType", "allowable actual")
 
 # §3.5: Item Scheme
 
+IT = TypeVar("IT", bound="Item")
 
-class Item(NameableArtefact):
-    parent: Optional[Union["Item", "ItemScheme"]] = None
-    child: List["Item"] = []
+
+class Item(NameableArtefact, Generic[IT]):
+    parent: Optional[Union[IT, "ItemScheme"]] = None
+    child: List[IT] = []
 
     # NB this is required to prevent RecursionError in pydantic;
     #    see https://github.com/samuelcolvin/pydantic/issues/524
@@ -533,12 +535,12 @@ class Item(NameableArtefact):
             else self.id
         )
 
-    def append_child(self, other):
+    def append_child(self, other: IT):
         if other not in self.child:
             self.child.append(other)
         other.parent = self
 
-    def get_child(self, id):
+    def get_child(self, id) -> IT:
         """Return the child with the given *id*."""
         for c in self.child:
             if c.id == id:
@@ -554,9 +556,6 @@ class Item(NameableArtefact):
             # Either this Item is a top-level Item whose .parent refers to the
             # ItemScheme, or it has no parent
             return self.parent
-
-
-IT = TypeVar("IT", bound=Item)
 
 
 class ItemScheme(MaintainableArtefact, Generic[IT]):
